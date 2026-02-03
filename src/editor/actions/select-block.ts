@@ -1,4 +1,4 @@
-import { State, Action } from "../types";
+import { State, Action, Block } from "../types";
 import { updateBlockProperty } from "../helpers";
 
 export function selectBlock(state: State, payload: Action["payload"]) {
@@ -7,12 +7,13 @@ export function selectBlock(state: State, payload: Action["payload"]) {
   }
 
   const blocks = new Map(state.blocks);
+  let selectedBlock: Block | undefined = undefined;
   if (state.selectedBlockId !== null) {
     updateBlockProperty(blocks, state.selectedBlockId, "selected", false);
   }
   if (payload !== null) {
-    updateBlockProperty(blocks, payload, "selected", true);
+    selectedBlock = updateBlockProperty(blocks, payload, "selected", true);
   }
 
-  return { ...state, blocks, selectedBlockId: payload };
+  return { ...state, blocks, selectedBlockId: payload, selectedBlockElement: selectedBlock?.elementType || null };
 }

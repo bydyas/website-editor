@@ -5,6 +5,7 @@ export type Id = string;
 
 export interface State {
   selectedBlockId: Id | null;
+  selectedBlockElement: Block["elementType"] | null;
   blocks: Map<Id, Block>;
 }
 

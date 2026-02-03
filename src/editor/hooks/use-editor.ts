@@ -3,9 +3,15 @@ import { ACTIONS_ENUM, ELEMENTS_ENUM } from "../enums";
 import { reducer } from "../reducer";
 import type { State, Id } from "../types";
 
-const initialState: State = { selectedBlockId: null, blocks: new Map() };
+const initialState: State = { selectedBlockId: null, selectedBlockElement: null, blocks: new Map() };
 
-export function useEditor() {
+export type TUseEditor = Pick<State, "selectedBlockElement" | "blocks"> & {
+  addRow: () => void;
+  addColumn: () => void;
+  selectBlock: (id: Id | null) => void;
+};
+
+export function useEditor(): TUseEditor {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const addRow = () => dispatch({ type: ACTIONS_ENUM.ADD_BLOCK, payload: ELEMENTS_ENUM.ROW });
@@ -14,6 +20,7 @@ export function useEditor() {
 
   return {
     blocks: state.blocks,
+    selectedBlockElement: state.selectedBlockElement,
     addRow,
     addColumn,
     selectBlock,

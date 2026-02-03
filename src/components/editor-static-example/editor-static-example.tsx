@@ -1,9 +1,9 @@
 import { FC, useMemo, useCallback } from "react";
-import { Id, ELEMENTS_ENUM, useEditor } from "../../store";
-import { Icons } from "../icons";
+import { Id, ELEMENTS_ENUM, useEditor } from "../../editor";
 import { Stage } from "../stage";
 import { Column } from "../column";
 import { Row } from "../row";
+import { Properties } from "./properties";
 
 const elementsMap = new Map([
   [ELEMENTS_ENUM.COL, Column],
@@ -11,8 +11,8 @@ const elementsMap = new Map([
 ]);
 
 export const EditorStaticExample: FC = () => {
-  const { blocks, addRow, selectBlock, addColumn } = useEditor();
-
+  const { blocks, addRow, selectBlock, addColumn, selectedBlockElement } = useEditor();
+  console.log(blocks);
   const renderBlock = useCallback(
     (id: Id): JSX.Element | null => {
       const block = blocks.get(id);
@@ -35,70 +35,7 @@ export const EditorStaticExample: FC = () => {
   return (
     <div className="editor">
       <Stage onSelect={() => selectBlock(null)}>{rootBlocks.map(({ id }) => renderBlock(id))}</Stage>
-
-      <div className="properties">
-        <div className="section">
-          <div className="section-header">Page</div>
-          <div className="actions">
-            <button className="action" onClick={addRow}>
-              Add row
-            </button>
-          </div>
-        </div>
-
-        <div className="section">
-          <div className="section-header">Row</div>
-          <div className="actions">
-            <button className="action" onClick={addColumn}>
-              Add column
-            </button>
-          </div>
-        </div>
-
-        <div className="section">
-          <div className="section-header">Column</div>
-          <div className="button-group-field">
-            <label>Contents</label>
-            <div className="button-group">
-              <button className="selected">
-                <Icons.Text />
-              </button>
-              <button>
-                <Icons.Image />
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div className="section">
-          <div className="section-header">Text</div>
-          <div className="button-group-field">
-            <label>Alignment</label>
-            <div className="button-group">
-              <button className="selected">
-                <Icons.TextAlignLeft />
-              </button>
-              <button>
-                <Icons.TextAlignCenter />
-              </button>
-              <button>
-                <Icons.TextAlignRight />
-              </button>
-            </div>
-          </div>
-          <div className="textarea-field">
-            <textarea rows={8} placeholder="Enter text"></textarea>
-          </div>
-        </div>
-
-        <div className="section">
-          <div className="section-header">Image</div>
-          <div className="text-field">
-            <label htmlFor="image-url">URL</label>
-            <input id="image-url" type="text" />
-          </div>
-        </div>
-      </div>
+      <Properties selectedBlockElement={selectedBlockElement} addColumn={addColumn} addRow={addRow} />
     </div>
   );
 };
